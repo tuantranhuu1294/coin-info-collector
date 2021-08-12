@@ -1,0 +1,48 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 3
+    #password: ''
+    url: jdbc:mysql://localhost:3306/coin_info?useUnicode=true&characterEncoding=utf-8
+    username: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+server:
+  port: 9090
+  servlet:
+    context-path: /coin-streaming/v1
+
+httpclient:
+  connect-timeout: 90000
+  read-timeout: 90000
+
+cache:
+  redis:
+    host: localhost
+    port: 6379
+    time-to-live: 600000
+
+cronjob:
+  morning-report:
+    cron-expression: "0 15 6 * * ?"
+    zone: "Asia/Ho_Chi_Minh"
+
+service:
+  quotable:
+    random-quote-url: "https://api.quotable.io/random"
+  slack:
+    webhook:
+      channel:
+        breakout-alert-url: "https://hooks.slack.com/"
+        breakdown-alert-url: "https://hooks.slack.com/"
+  binance:
+    auth:
+      api-key: "binance-api-key"
+      api-secret: "binance-api-secret"

@@ -1,0 +1,65 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 3
+    password: ${JDBC_PASSWORD}
+    url: ${JDBC_URL}
+    username: ${JDBC_USERNAME}
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+server:
+  port: 9090
+  servlet:
+    context-path: /coin-crawler/v1
+
+httpclient:
+  connect-timeout: 90000
+  read-timeout: 90000
+
+cache:
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+    time-to-live: ${REDIS_CACHE_TTL}
+
+crawler:
+  default-user-agent: ${DEFAULT_USER_AGENT}
+  binance:
+    coin-price-history:
+      limit-size-per-request: ${BNB_PRICE_HISTORY_LIMIT_SIZE_PER_REQ}
+      limit-time-size-per-request: ${BNB_PRICE_HISTORY_TIME_SIZE_PER_REQ}
+  coinmarketcap:
+    url:
+      coin-price-history: ${CMC_COIN_PRICE_HISTORY_URL}
+      list-coins: ${CMC_LIST_COIN_URL}
+    coin-detail:
+      statistic-elem-class-name: ${CMC_CRAWLER_STATISTIC_ELEM_CLASS_NAME}
+      top-market-cap-elem-class-name: ${CMC_CRAWLER_TOP_MARKET_CAP_ELEM_CLASS_NAME}
+
+cronjob:
+  get-coin-statistic:
+    cron-expression: ${GET_COIN_STATISTIC_CRON_EXPRESSION}
+    zone: ${GET_COIN_STATISTSTIC_ZONE}
+  get-coin-price-history:
+    cron-expression: ${GET_COIN_PRICE_HISTORY_CRON_EXPRESSION}
+    zone: ${GET_COIN_PRICE_HISTORY_ZONE}
+  calculate-percent:
+    cron-expression: ${CALCULATE_PERCENT_CRON_EXPRESSION}
+    zone: ${CALCULATE_PERCENT_ZONE}
+
+service:
+  slack:
+    webhook:
+      channel:
+        breakout-alert-url: ${SLACK_CHANNEL_BREAKOUT_ALERT_URL}
+  binance:
+    auth:
+      api-key: ${BINANCE_API_KEY}
+      api-secret: ${BINANCE_API_SECRET}

@@ -1,0 +1,79 @@
+version: '3.3'
+services:
+  coin-info-redis:
+    hostname: coin-info.redis.local
+    image: redis
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  coin-info-mysql:
+    image: mysql:8.0.21
+    container_name: coin-info-mysql
+    restart: unless-stopped
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_DATABASE=coin_info
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: "mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}"
+
+  coin-info-liquibase:
+    hostname: coin-info-liquibase.local
+    build: ./common
+    depends_on:
+      - mysql
+    environment:
+      JDBC_URL: jdbc:mysql://coin-info-mysql:3306/coin_info?useUnicode=true&characterEncoding=utf-8
+      JDBC_USERNAME: root
+      JDBC_PASSWORD: ""
+
+  crawler-service:
+    hostname: crawler-service.local
+    ports:
+      - 9091:9090
+    build: ./crawler
+    depends_on:
+      - coin-info-mysql
+      - coin-info-redis
+    environment:
+      ENV: local
+      JDBC_URL: jdbc:mysql://coin-info-mysql:3306/coin_info?useUnicode=true&characterEncoding=utf-8
+      JDBC_USERNAME: root
+      JDBC_PASSWORD: ""
+      REDIS_HOST: coin-info-redis
+      REDIS_PORT: 6379
+      REDIS_CACHE_TTL: 600000
+      DEFAULT_USER_AGENT: "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:86.0) Gecko/20100101 Firefox/86.0"
+      CMC_COIN_PRICE_HISTORY_URL: "https://coinmarketcap.com/currencies/%s/"
+      CMC_LIST_COIN_URL: "https://coinmarketcap.com/?page="
+      CMC_CRAWLER_STATISTIC_ELEM_CLASS_NAME: "sc-16r8icm-0 fIhwvd"
+      CMC_CRAWLER_TOP_MARKET_CAP_ELEM_CLASS_NAME: "cmc-table cmc-table___11lFC cmc-table-homepage___2_guh "
+      SLACK_CHANNEL_BREAKOUT_ALERT_URL: "https://hooks.slack.com/"
+
+  streaming-service:
+    hostname: streaming-service.local
+    ports:
+      - 9090:9090
+    build: ./streaming
+    depends_on:
+      - coin-info-mysql
+      - coin-info-redis
+    environment:
+      ENV: local
+      JDBC_URL: jdbc:mysql://coin-info-mysql:3306/coin_info?useUnicode=true&characterEncoding=utf-8
+      JDBC_USERNAME: root
+      JDBC_PASSWORD: ""
+      REDIS_HOST: coin-info-redis
+      REDIS_PORT: 6379
+      REDIS_CACHE_TTL: 600000
+      RANDOM_QUOTE_URL: "https://api.quotable.io/random"
+      SLACK_CHANNEL_BREAKOUT_ALERT_URL: "https://hooks.slack.com/"
+      BINANCE_API_KEY: "binanace-api-key"
+      BINANCE_API_SECRET: "binanace-api-secret"

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: $JOB_NAME
+data:
+  ENV: dev
+  VERSION: "$IMAGE_TAG"
+  JDBC_URL: "jdbc:mysql:///coin_info?useUnicode=true&characterEncoding=utf-8"
+  REDIS_PORT: "6379"
+  REDIS_CACHE_TTL: "600000"
+  RANDOM_QUOTE_URL: "https://api.quotable.io/random"
+  SLACK_CHANNEL_BREAKOUT_ALERT_URL: "https://hooks.slack.com/"
+  SLACK_CHANNEL_BREAKDOWN_ALERT_URL: "https://hooks.slack.com/"
+  MORNING_REPORT_CRON_EXPRESSION: "0 15 6 * * ?"
+  MORNING_REPORT_ZONE: "Asia/Ho_Chi_Minh"

@@ -1,0 +1,12 @@
+steps:
+  - name: maven:3.6.0-jdk-8-alpine
+    entrypoint: 'mvn'
+    args: ['package', '-DskipTests']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia.gcr.io/cgl-capital/coin-info-crawler:${IMAGE_TAG}', 'crawler']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ["push", "asia.gcr.io/cgl-capital/coin-info-crawler:${IMAGE_TAG}"]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-t', 'asia.gcr.io/cgl-capital/coin-info-streaming:${IMAGE_TAG}', 'streaming' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ "push", "asia.gcr.io/cgl-capital/coin-info-streaming:${IMAGE_TAG}" ]

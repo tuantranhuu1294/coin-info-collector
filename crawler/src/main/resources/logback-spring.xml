@@ -1,0 +1,90 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36}.%M - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <springProfile name="local">
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36}.%M - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <logger name="net.cglcapital.coininfo" level="debug"/>
+        <root level="info">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="dev,qc,uat">
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+                <providers>
+                    <timestamp/>
+                    <mdc/> <!-- MDC variables on the Thread will be written as JSON fields-->
+                    <context/> <!--Outputs entries from logback's context -->
+                    <logLevel/>
+                    <loggerName/>
+                    <pattern/>
+                    <threadName/>
+                    <message/>
+
+                    <logstashMarkers/> <!-- Useful so we can add extra information for specific log lines as Markers-->
+                    <arguments/> <!--or through StructuredArguments-->
+
+                    <stackTrace>
+                        <fieldName>stackTrace</fieldName>
+                        <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                            <exclude>net\.sf\.cglib\..*</exclude>
+                            <maxDepthPerThrowable>30</maxDepthPerThrowable>
+                            <rootCauseFirst>true</rootCauseFirst>
+                        </throwableConverter>
+                    </stackTrace>
+                </providers>
+            </encoder>
+        </appender>
+
+        <logger name="net.cglcapital.coininfo" level="debug"/>
+
+        <root level="info">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="prod">
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+                <providers>
+                    <timestamp/>
+                    <mdc/> <!-- MDC variables on the Thread will be written as JSON fields-->
+                    <context/> <!--Outputs entries from logback's context -->
+                    <logLevel/>
+                    <loggerName/>
+                    <pattern/>
+                    <threadName/>
+                    <message/>
+
+                    <logstashMarkers/> <!-- Useful so we can add extra information for specific log lines as Markers-->
+                    <arguments/> <!--or through StructuredArguments-->
+
+                    <stackTrace>
+                        <fieldName>stackTrace</fieldName>
+                        <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                            <exclude>net\.sf\.cglib\..*</exclude>
+                            <maxDepthPerThrowable>30</maxDepthPerThrowable>
+                            <rootCauseFirst>true</rootCauseFirst>
+                        </throwableConverter>
+                    </stackTrace>
+                </providers>
+            </encoder>
+        </appender>
+
+        <logger name="net.cglcapital.coininfo" level="info"/>
+
+        <root level="info">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+</configuration>

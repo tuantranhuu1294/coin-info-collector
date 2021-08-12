@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: $JOB_NAME
+data:
+  ENV: dev
+  VERSION: "$IMAGE_TAG"
+  JDBC_URL: "jdbc:mysql:///coin_info?useUnicode=true&characterEncoding=utf-8"
+  REDIS_PORT: "6379"
+  REDIS_CACHE_TTL: "600000"
+  DEFAULT_USER_AGENT: "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:86.0) Gecko/20100101 Firefox/86.0"
+  BNB_PRICE_HISTORY_LIMIT_SIZE_PER_REQ: "100"
+  BNB_PRICE_HISTORY_TIME_SIZE_PER_REQ: "8640000000"
+  CMC_COIN_PRICE_HISTORY_URL: "https://coinmarketcap.com/currencies/%s/"
+  CMC_LIST_COIN_URL: "https://coinmarketcap.com/?page="
+  CMC_CRAWLER_STATISTIC_ELEM_CLASS_NAME: "sc-16r8icm-0 dxttqv"
+  CMC_CRAWLER_TOP_MARKET_CAP_ELEM_CLASS_NAME: "cmc-table cmc-table___11lFC cmc-table-homepage___2_guh "
+  SLACK_CHANNEL_BREAKOUT_ALERT_URL: "https://hooks.slack.com/"
+  GET_COIN_STATISTIC_CRON_EXPRESSION: "0 0 8 * * ?"
+  GET_COIN_PRICE_HISTORY_CRON_EXPRESSION: "0 1 7 * * ?"
+  CALCULATE_PERCENT_CRON_EXPRESSION: "0 30 7 * * ?"
+  GET_COIN_STATISTSTIC_ZONE: "Asia/Ho_Chi_Minh"
+  GET_COIN_PRICE_HISTORY_ZONE: "Asia/Ho_Chi_Minh"
+  CALCULATE_PERCENT_ZONE: "Asia/Ho_Chi_Minh"

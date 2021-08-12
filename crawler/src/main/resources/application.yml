@@ -1,0 +1,67 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 3
+    password: ''
+    url: jdbc:mysql://localhost:3306/coin_info?useUnicode=true&characterEncoding=utf-8
+    username: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+
+server:
+  port: 9091
+  servlet:
+    context-path: /coin-crawler/v1
+
+httpclient:
+  connect-timeout: 90000
+  read-timeout: 90000
+
+cache:
+  redis:
+    host: localhost
+    port: 6379
+    time-to-live: 600000
+
+crawler:
+  default-user-agent: "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:86.0) Gecko/20100101 Firefox/86.0"
+  binance:
+    coin-price-history:
+      limit-size-per-request: 100
+      limit-time-size-per-request: 8640000000
+  coinmarketcap:
+    url:
+      coin-price-history: "https://coinmarketcap.com/currencies/%s/"
+      list-coins: "https://coinmarketcap.com/?page="
+    coin-detail:
+      statistic-elem-class-name: "sc-16r8icm-0 fmPyWa"
+      top-market-cap-elem-class-name: "h7vnx2-2 bFpGkc cmc-table  "
+
+cronjob:
+  get-coin-statistic:
+    cron-expression: "0 40 14 * * ?"
+    zone: "Asia/Ho_Chi_Minh"
+  get-coin-price-history:
+    cron-expression: "0 1 7 * * ?"
+    zone: "Asia/Ho_Chi_Minh"
+  calculate-percent:
+    cron-expression: "0 30 8 * * ?"
+    zone: "Asia/Ho_Chi_Minh"
+
+service:
+  slack:
+    webhook:
+      channel:
+        breakout-alert-url: "https://hooks.slack.com/"
+  binance:
+    auth:
+      api-key: "binance-api-key"
+      api-secret: "binance-api-secret"
